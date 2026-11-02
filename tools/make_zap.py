@@ -35,14 +35,15 @@ for c in et['clusters']:
         setattr_(c, 'generic device type', '0x09')          # Generic indoor fixture (light panel)
         setattr_(c, 'manufacturer name', 'Nisnor')
         setattr_(c, 'model identifier', 'Surface lumineuse CCT')
-        setattr_(c, 'application version', '0x03')
-        setattr_(c, 'sw build id', '0.3.0')
+        setattr_(c, 'application version', '0x04')
+        setattr_(c, 'sw build id', '0.4.0')
         setattr_(c, 'date code', '20261020')
     elif n == 'On/off':
         setattr_(c, 'on/off', '0x01', 'NVM')           # factory default: ON
         setattr_(c, 'start up on off', '0xFF', 'NVM')       # 0xFF = previous
     elif n == 'Level Control':
         setattr_(c, 'current level', '0xFE', 'NVM')
+        setattr_(c, 'on level', '0xFF')                      # 0xFF = "On" restores the previous level
         # Expose the 1..254 range the plugin clamps to
         # (SL_ZIGBEE_AF_PLUGIN_LEVEL_CONTROL_MINIMUM/MAXIMUM_LEVEL in the .slcp).
         tmpl = attr(c, 'on level')

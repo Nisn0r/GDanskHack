@@ -127,7 +127,8 @@ images déclarées dans un **index local**.
 1. Produire l'image : `tools/set_version.sh N`, `REGEN=1 ./build.sh app`,
    puis `./make_ota.sh` (voir le [README principal](../README.md)) →
    `out/gdansk_light-0x0000000N.ota`. La version doit être **strictement
-   supérieure** à celle installée (v3 actuellement).
+   supérieure** à celle installée (champ `swBuildId` du cluster Basic,
+   « 0.N.0 » pour la version N).
 2. Copier le `.ota` dans le dossier de données de Zigbee2MQTT, par exemple
    dans `ota/`.
 3. Copier `gdansk_ota_index.json` à côté de `configuration.yaml` et y
@@ -177,4 +178,5 @@ accélère le transfert.
 | Lampe reconnue sous un autre nom | `ModelIdentifier` différent de `Surface lumineuse CCT` (firmware modifié) : adapter `zigbeeModel` dans le convertisseur |
 | La lampe ne rejoint pas le réseau | appairage non ouvert, ou lampe encore liée à un ancien réseau : refaire les 6 coupures |
 | Les 6 coupures ne font rien | phases allumées trop longues (> 3 s), ou alimentation qui maintient le module trop longtemps après la coupure (voir le condensateur de lissage dans le [README principal](../README.md)) |
+| La lampe se rallume à 100 % au lieu de sa luminosité précédente | firmware antérieur à la v4 (`OnLevel` = 0xFE) : installer la v4 par OTA ; en attendant, Dev console → endpoint 1, `genLevelCtrl`, attribut `onLevel` = 255, Write (perdu à la coupure suivante) |
 | Aucune mise à jour proposée | version du `.ota` pas supérieure à celle installée, chemin `url` incorrect, ou index non déclaré dans `configuration.yaml` |

@@ -74,7 +74,7 @@ signaux attendus par l'électronique gdansk. C'est le but de ce projet.
 - **Mises à jour OTA** via le Gecko Bootloader ([bootloader/](bootloader/README.md)).
 - Watchdog, build de production sans console ni debug.
 
-Version actuelle : **v3**, voir [CHANGELOG.md](CHANGELOG.md).
+Version actuelle : **v4**, voir [CHANGELOG.md](CHANGELOG.md).
 
 ## Matériel
 

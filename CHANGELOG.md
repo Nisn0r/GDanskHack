@@ -3,7 +3,21 @@
 Versions du firmware applicatif (`ApplicationVersion` du cluster Basic,
 version OTA). Le bootloader n'a pas changé depuis la v1.
 
-## v3 — 2026-10-23 (version déployée)
+## v4 — 2026-11-02 (version déployée)
+
+- **Corrigé** : après extinction puis rallumage (commande « On »), la
+  lampe repartait à 100 % au lieu de reprendre sa luminosité précédente.
+  L'attribut `OnLevel` (Level Control 0x0011) valait 0xFE, repris de
+  l'exemple `zigbee_z3_light` : le plugin Level Control remonte alors
+  toujours à ce niveau. Il vaut maintenant 0xFF (« non défini » =
+  reprendre le niveau précédent), réglé dans `tools/make_zap.py`.
+  Diagnostic confirmé sur la lampe en v3 : écrire `onLevel` = 255 depuis
+  Zigbee2MQTT suffit à corriger le rallumage (jusqu'à la coupure
+  suivante, l'attribut étant en RAM).
+- Installée par OTA dans le luminaire et validée.
+- Binaires archivés localement dans `release/v4/`.
+
+## v3 — 2026-10-23
 
 - **Corrigé** : sens de la température de couleur. L'alimentation gdansk
   attend 100 % de rapport cyclique = le plus froid ; la v2 était inversée

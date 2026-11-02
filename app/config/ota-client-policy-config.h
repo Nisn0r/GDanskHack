@@ -26,7 +26,7 @@
 // <o SL_ZIGBEE_AF_PLUGIN_OTA_CLIENT_POLICY_FIRMWARE_VERSION> Firmware Version <1-4294967295>
 // <i> Default: 1
 // <i> This is the device's current firmware version, used when querying the OTA server about the next image to use for an upgrade.
-#define SL_ZIGBEE_AF_PLUGIN_OTA_CLIENT_POLICY_FIRMWARE_VERSION   3
+#define SL_ZIGBEE_AF_PLUGIN_OTA_CLIENT_POLICY_FIRMWARE_VERSION   4
 
 // <o SL_ZIGBEE_AF_PLUGIN_OTA_CLIENT_POLICY_HARDWARE_VERSION> Hardware Version <0-65535>
 // <i> Default: 0

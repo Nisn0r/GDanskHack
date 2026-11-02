@@ -106,7 +106,7 @@ configuration:
   - name: SL_ZIGBEE_AF_PLUGIN_OTA_CLIENT_POLICY_IMAGE_TYPE_ID
     value: 0x0001
   - name: SL_ZIGBEE_AF_PLUGIN_OTA_CLIENT_POLICY_FIRMWARE_VERSION
-    value: 0x00000003
+    value: 0x00000004
 
 source:
   - path: main.c

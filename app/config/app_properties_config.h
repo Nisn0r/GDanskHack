@@ -51,7 +51,7 @@
 // <o SL_APPLICATION_VERSION> Version number for this application
 // <0-4294967295:1>
 // <i> Default: 1 [0-4294967295]
-#define SL_APPLICATION_VERSION                 3
+#define SL_APPLICATION_VERSION                 4
 
 // Capabilities of this application
 // Default: 0

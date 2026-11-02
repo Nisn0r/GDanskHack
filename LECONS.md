@@ -38,6 +38,12 @@ Le détail est dans les fichiers cités.
 
 ## SDK / génération
 
+- **Relire les valeurs par défaut héritées d'un exemple** : `OnLevel` =
+  0xFE, repris de `zigbee_z3_light`, faisait rallumer la lampe à 100 %
+  au lieu du niveau précédent (0xFF attendu). Les attributs RAM
+  inscriptibles se testent sans flasher : écriture depuis le
+  coordinateur ([CHANGELOG.md](CHANGELOG.md), v4).
+
 - `slc` **n'écrase pas** les `config/*.h` existants à la régénération :
   modifier le `.slcp` **et** l'en-tête.
 - **Watchdog désactivé par défaut** dans les projets Zigbee

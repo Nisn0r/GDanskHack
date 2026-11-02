@@ -67,6 +67,11 @@ ré-appairer.
 | Commandes Color Control | « Discover Commands Received » | 0x0A, 0x47, 0x4B, 0x4C (Move to / Stop / Move / Step Color Temperature) |
 | Commande non gérée (ex. Move to Hue) | Default Response | 0x81 UNSUP_COMMAND |
 
+**Rallumage** : `OnLevel` (0x0011) vaut 0xFF, donc la commande « On »
+reprend la luminosité d'avant l'extinction. Un coordinateur peut y écrire
+un niveau fixe (1-254) ; la valeur n'est pas conservée au redémarrage
+(stockage RAM).
+
 **Power-on behavior** : les trois attributs `StartUp*`, gérés par les
 plugins du SDK. Par défaut (`0xFF`/`0xFFFF`), la lampe reprend son état
 précédent. Au tout premier démarrage : allumée, 100 %, 4000 K.
