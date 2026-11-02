@@ -120,4 +120,4 @@ coûté deux sessions de faux débogage radio.)
 - Autre coordinateur testé : jonction OK. Éviter `zigbee_trust_center_keepalive` : ce coordinateur ne gère pas
   le cluster Keep-Alive (0x0025), d'où des erreurs puis une recherche de
   nouveau réseau.
-- Zigbee2MQTT : index OTA local, à documenter.
+- Zigbee2MQTT : convertisseur externe et index OTA dans [z2m/](z2m/README.md).

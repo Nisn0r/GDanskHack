@@ -1,7 +1,12 @@
-# BOOTLOADER.md
+# Bootloader
 
-Notes sur le Gecko Bootloader pour l'EFR32MG21A020F768IM32 (carte définitive,
-module Tuya). Sources : code du SDK 2026.6.2 (`bootloader/platform/bootloader/`,
+Gecko Bootloader de gdansk-light (EFR32MG21A020F768IM32, module Tuya
+ZSLC5), dérivé de l'exemple du SDK `bootloader-storage-internal-single-768k` :
+application à `0x4000`, un slot de stockage interne pour les images OTA. Le
+projet général est décrit dans le [README principal](../README.md),
+l'application dans [app/](../app/README.md).
+
+Sources : code du SDK 2026.6.2 (`bootloader/platform/bootloader/`,
 `bootloader_sample_app/`) et doc officielle
 <https://docs.silabs.com/mcu-bootloader/latest/> (v3.3.2, PDF complet :
 `https://docs.silabs.com/mcu-bootloader/3.3.2/mcu-bootloader.pdf`).
@@ -11,10 +16,33 @@ doc en ligne décrit la 3.3.2 (et cite des essais en 3.4.0) — une option
 documentée peut ne pas encore exister dans notre SDK, vérifier dans les
 `.slcc` avant de compter dessus.
 
+## Carte mémoire flash
+
+```
+0x00000  bootloader      16 Ko   (ce dossier)
+0x04000  application    ~190 Ko  (app/, max 352 Ko)
+0x5C000  slot OTA 0      352 Ko  (images téléchargées)
+0xB6000  NVM3             32 Ko  (réseau, clés, attributs NVM)
+0xBE000  dernière page            (tokens fabrication — ne pas effacer)
+```
+
+L'application trouve le slot via `slot_manager` (`USE_FIRST_SLOT`).
+
+## Construire et flasher
+
+```sh
+./build.sh bootloader         # depuis la racine du dépôt
+commander flash bootloader/cmake_gcc/build/base/gdansk_light_bootloader.s37 --device EFR32MG21A020F768IM32
+```
+
+Le bootloader ne se met pas à jour par OTA dans ce projet : il est flashé
+une fois au débogueur, avec le module **débranché du secteur** (voir
+l'avertissement du [README principal](../README.md)).
+
 ## État sécurité de la puce (2026-10-20)
 
 `commander security status` : debug lock off, secure boot off, aucune clé en
-OTP, SE firmware 1.2.6 — puce vierge, cf. COMMANDER.md.
+OTP, SE firmware 1.2.6 — puce vierge, cf. [COMMANDER.md](../COMMANDER.md).
 
 ## Architecture sur xG21
 
@@ -41,7 +69,7 @@ idem `BOOTLOADER_ENFORCE_SIGNED_UPGRADE`/`_ENCRYPTED_UPGRADE`. Un bootloader
 généré depuis l'exemple n'exige donc ni signature ni secure boot — à
 activer explicitement dans le `.slcp`.
 
-Exemple concret : `bootloader/` (10,8 Ko sur 16).
+Ce bootloader occupe 10,8 Ko sur 16.
 
 ## Choix pour le routeur Zigbee OTA
 

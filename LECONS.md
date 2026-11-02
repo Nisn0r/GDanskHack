@@ -45,7 +45,7 @@ Le détail est dans les fichiers cités.
   commentaire). Une fois activé, le framework dort (EM1) jusqu'au prochain
   événement **sans limite liée au watchdog** → reset toutes les ~8 s si la
   lampe est inactive. Remède : un événement périodique (1 s) qui réveille
-  la boucle principale ([README.md](README.md)).
+  la boucle principale ([app/README.md](app/README.md#watchdog)).
 - Le watchdog Series 2 est déjà gelé en EM2/EM3 (`CFG.EM2RUN/EM3RUN = 0`) ;
   pas d'option en EM1.
 - `slc` cassé après mise à jour : résoudre le binaire via `slt where

@@ -8,7 +8,7 @@ description: >
   application at 0x4000, single 352 kB storage slot at 0x5C000 used by the
   Zigbee OTA client. Keep SLOT0_START in sync with the application's
   SL_ZIGBEE_AF_PLUGIN_OTA_STORAGE_SIMPLE_EEPROM_STORAGE_START (see
-  ../README.md and BOOTLOADER.md).
+  README.md in this folder).
 author: nisnor
 
 component:

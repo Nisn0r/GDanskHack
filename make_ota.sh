@@ -28,7 +28,7 @@ GBL="$OUT/gdansk_light-$VER.gbl"
 OTA="$OUT/gdansk_light-$VER.ota"
 
 # Unsigned / unencrypted for now: the bootloader doesn't enforce signatures
-# (see BOOTLOADER.md before enabling --sign/--encrypt).
+# (see bootloader/README.md before enabling --sign/--encrypt).
 commander gbl create "$GBL" --app "$IMG" --device EFR32MG21A020F768IM32
 commander ota create --type zigbee -o "$OTA" --upgrade-image "$GBL" \
   --manufacturer-id "$MFG" --image-type "$TYPE" --firmware-version "$VER" \
