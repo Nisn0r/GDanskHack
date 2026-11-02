@@ -1,0 +1,34 @@
+project_name: gdansk_light_bootloader
+package: bootloader
+quality: production
+label: gdansk-light - Gecko Bootloader (internal storage, single slot)
+description: >
+  Gecko Bootloader for the gdansk-light Zigbee router (EFR32MG21A020F768IM32).
+  Derived from the SDK sample bootloader-storage-internal-single-768k:
+  application at 0x4000, single 352 kB storage slot at 0x5C000 used by the
+  Zigbee OTA client. Keep SLOT0_START in sync with the application's
+  SL_ZIGBEE_AF_PLUGIN_OTA_STORAGE_SIMPLE_EEPROM_STORAGE_START (see
+  ../README.md and BOOTLOADER.md).
+author: nisnor
+
+component:
+  - id: bootloader_core
+  - id: bootloader_crc
+  - id: bootloader_aes_sha_ecdsa
+  - id: bootloader_internal_storage
+  - id: bootloader_storage_slots
+  - id: bootloader_image_parser
+  - id: bootloader_common_storage
+  - id: bootloader_token_management
+  - id: bootloader_debug
+
+configuration:
+  - name: SLOT0_ENABLE
+    value: 1
+  # 0x5C000, 352 kB (0x58000) -> slot ends at 0xB4000, below NVM3/tokens.
+  - name: SLOT0_START
+    value: 376832
+  - name: SLOT0_SIZE
+    value: 360448
+  - name: BTL_STORAGE_BASE_ADDRESS
+    value: 376832
