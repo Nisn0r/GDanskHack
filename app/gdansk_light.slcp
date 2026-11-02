@@ -1,0 +1,122 @@
+project_name: gdansk_light
+label: gdansk-light - Zigbee CCT light (router, mains powered, OTA)
+package: zigbee
+category: Zigbee Application
+quality: production
+description: >
+  Zigbee 3.0 router, mains powered, single endpoint (1) "Color Temperature
+  Light" (0x010C): Basic, Identify, Groups, Scenes, On/Off, Level Control,
+  Color Control (color temperature only) servers + OTA Upgrade client.
+  Power-on behavior via StartUpOnOff / StartUpCurrentLevel /
+  StartUpColorTemperatureMireds (NVM-backed). PWM: PA00 = brightness,
+  PA03 = color temperature (TIMER0 CC0/CC1, hand-written in app.c).
+  Factory reset: 6 short power cycles (power_cycle_reset.c).
+  Requires the Gecko Bootloader in ../bootloader (app starts at 0x4000).
+author: nisnor
+
+component:
+  - id: sl_main
+  # Production: no console, CLI or debug print (module sealed, no debugger).
+  # For a bench build, add back: cli (instance example), iostream_rtt,
+  # zigbee_debug_basic, zigbee_debug_print, zigbee_zcl_cli, zigbee_core_cli.
+  # Stack / network
+  - id: zigbee_pro_stack
+  - id: zigbee_source_route
+  - id: zigbee_zcl_framework_core
+  - id: zigbee_network_steering
+  - id: zigbee_scan_dispatch
+  - id: zigbee_update_tc_link_key
+  - id: zigbee_reporting
+  # ZCL clusters (endpoint 1)
+  - id: zigbee_basic
+  - id: zigbee_identify
+  - id: zigbee_groups_server
+  - id: zigbee_scenes
+  - id: zigbee_on_off
+  - id: zigbee_level_control
+  - id: zigbee_color_control_server
+  # OTA Upgrade client + Gecko Bootloader (internal storage slot 0)
+  - id: zigbee_application_bootloader
+  - id: zigbee_ota_client
+  - id: zigbee_ota_client_policy
+  - id: zigbee_ota_bootload
+  - id: zigbee_ota_storage_simple
+  - id: zigbee_ota_storage_simple_eeprom
+  - id: slot_manager
+  - id: clock_manager
+  # Hand-written PWM in app.c
+  - id: emlib_cmu
+  - id: emlib_gpio
+  - id: emlib_timer
+  - id: toolchain_gcc_lto
+    condition:
+      - toolchain_gcc
+
+configuration:
+  - name: SLI_ZIGBEE_PRIMARY_NETWORK_DEVICE_TYPE
+    value: SLI_ZIGBEE_NETWORK_DEVICE_TYPE_ROUTER
+  - name: SLI_ZIGBEE_PRIMARY_NETWORK_SECURITY_TYPE
+    value: SLI_ZIGBEE_NETWORK_SECURITY_TYPE_3_0
+  - name: SL_ZIGBEE_BINDING_TABLE_SIZE
+    value: 10
+  - name: NVM3_DEFAULT_NVM_SIZE
+    value: 32768
+  - name: SL_PSA_ITS_SUPPORT_V1_DRIVER
+    value: 0
+  - name: SL_PSA_ITS_SUPPORT_V2_DRIVER
+    value: 0
+  - name: SL_PSA_ITS_SUPPORT_V3_DRIVER
+    value: 1
+  # Watchdog (WDOG0, 2 s): fed by the stack and app ticks. The SDK default
+  # leaves it disabled; a hung lamp would stay hung until power is cut.
+  - name: SL_LEGACY_HAL_DISABLE_WATCHDOG
+    value: 0
+  # PA03 (colour temperature PWM) is also the SWV trace pin: the debug_swo
+  # component (pulled in by the Zigbee debug components) would drive it.
+  - name: SL_DEBUG_SWO_ENABLE
+    value: 0
+  # Level Control: standard lighting range 1..254 (0xFF is reserved; deCONZ
+  # sometimes sends it). The plugin clamps every command to these bounds.
+  - name: SL_ZIGBEE_AF_PLUGIN_LEVEL_CONTROL_MINIMUM_LEVEL
+    value: 1
+  - name: SL_ZIGBEE_AF_PLUGIN_LEVEL_CONTROL_MAXIMUM_LEVEL
+    value: 254
+  # Color Control: color temperature only.
+  - name: SL_ZIGBEE_AF_PLUGIN_COLOR_CONTROL_SERVER_XY
+    value: 0
+  - name: SL_ZIGBEE_AF_PLUGIN_COLOR_CONTROL_SERVER_HSV
+    value: 0
+  - name: SL_ZIGBEE_AF_PLUGIN_COLOR_CONTROL_SERVER_TEMP
+    value: 1
+  # RF path: ZSLC5 ANT pin = path 1 (energy scan 15-25 dB stronger than
+  # path 0, measured 2026-10-20). Same as the SDK default. See README.
+  - name: SL_RAIL_UTIL_RF_PATH_INT_RF_PATH_MODE
+    value: SL_RAIL_ANTENNA_1
+  # OTA storage: use the bootloader's slot 0 (via slot_manager). The
+  # offsets below are only a fallback and match ../bootloader (0x5C000-0xB4000).
+  - name: SL_ZIGBEE_AF_PLUGIN_OTA_STORAGE_SIMPLE_EEPROM_GECKO_BOOTLOADER_STORAGE_SUPPORT
+    value: USE_FIRST_SLOT
+  - name: SL_ZIGBEE_AF_PLUGIN_OTA_STORAGE_SIMPLE_EEPROM_STORAGE_START
+    value: 376832
+  - name: SL_ZIGBEE_AF_PLUGIN_OTA_STORAGE_SIMPLE_EEPROM_STORAGE_END
+    value: 737280
+  - name: SL_ZIGBEE_AF_PLUGIN_OTA_STORAGE_SIMPLE_EEPROM_READ_MODIFY_WRITE_SUPPORT
+    value: 0
+  # OTA image identity -- must match the .ota files we build (see ../README.md).
+  - name: SL_ZIGBEE_AF_PLUGIN_OTA_CLIENT_POLICY_IMAGE_TYPE_ID
+    value: 0x0001
+  - name: SL_ZIGBEE_AF_PLUGIN_OTA_CLIENT_POLICY_FIRMWARE_VERSION
+    value: 0x00000003
+
+source:
+  - path: main.c
+  - path: app.c
+  - path: power_cycle_reset.c
+
+config_file:
+  - path: config/zcl/zcl_config.zap
+    file_id: zap_configuration_file_id
+    directory: zcl
+
+include:
+  - path: ./
